@@ -9,6 +9,7 @@ import auth from "./router/auth";
 import users from './router/users';
 import products from './router/products';
 import categorys from "./router/categorys";
+import subCategorys from './router/subCategorys';
 import notifications from "./router/notifications";
 import orders from './router/orders';
 
@@ -16,6 +17,7 @@ import orders from './router/orders';
 import userModel from './model/users';
 import productModel from "./model/products";
 import CategoryModel from "./model/categorys";
+import SubCategoryModel from "./model/subCategorys";
 import notificationModel from "./model/notifications";
 import orderModel from './model/orders'
 
@@ -45,6 +47,7 @@ app.use("/", auth);
 app.use('/user', users);
 app.use('/product', products);
 app.use('/category', categorys);
+app.use('/subCategory', subCategorys);
 app.use("/notification", notifications);
 app.use("/order", orders);
 

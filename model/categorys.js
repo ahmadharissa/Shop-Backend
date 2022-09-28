@@ -5,10 +5,10 @@ const categorySchema = new mongoose.Schema({
         type: String,
         required: true
     },
-    product: [
+    subCategory: [
         {
             type: mongoose.Schema.Types.ObjectId,
-            ref: "Product"
+            ref: "SubCategory"
         }
     ]
 })
