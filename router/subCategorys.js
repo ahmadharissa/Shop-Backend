@@ -12,8 +12,8 @@ router.get('/', getSubCategorys)
 router.get('/:id', getSubCategory)
 router.post('/', adminAuth, createSubCategory)
 router.put('/:id', adminAuth, editeSubCategory)
-router.put('/addToCategory/:id', adminAuth, addToSubCategory)
+router.put('/addToSubCategory/:id', adminAuth, addToSubCategory)
 router.delete('/:id', adminAuth, deleteSubCategory)
-router.delete('/deleteFromCategory/:id', adminAuth, deleteFromSubCategory)
+router.delete('/deleteFromSubCategory/:id', adminAuth, deleteFromSubCategory)
 
 export default router;
