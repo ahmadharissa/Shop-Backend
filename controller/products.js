@@ -24,6 +24,7 @@ export const getProduct = async (req, res) => {
 
 export const createProduct = async (req, res) => {
     try {
+        req.body.images = ["no.png"]
         const product = await Product.create(req.body)
         res.json(product)
     } catch (error) {
