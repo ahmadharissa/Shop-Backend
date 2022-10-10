@@ -26,6 +26,8 @@ export const createProduct = async (req, res) => {
     try {
         const product = await Product.create(req.body)
         product.images = ["no.png"]
+        await product.save()
+        
         res.json(product)
     } catch (error) {
         res.status(500).json({ message: error.message });
