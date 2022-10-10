@@ -4,7 +4,7 @@ import Category from "../model/categorys"
 export const getCategorys = async (req, res) => {
     try {
         const categorys = await Category.find().populate({ path: "subCategory" }).exec()
-        res.json(categorys)
+        res.status(200).json(categorys)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -14,7 +14,7 @@ export const getCategory = async (req, res) => {
     const id = req.params.id
     try {
         const category = await Category.findById(id).populate({ path: "subCategory" }).exec()
-        res.json(category)
+        res.status(200).json(category)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -23,7 +23,7 @@ export const getCategory = async (req, res) => {
 export const createCategory = async (req, res) => {
     try {
         const category = await Category.create(req.body)
-        res.json(category)
+        res.status(200).json(category)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

@@ -4,7 +4,7 @@ import SubCategory from "../model/subCategorys"
 export const getSubCategorys = async (req, res) => {
     try {
         const subCategorys = await SubCategory.find().populate({ path: "product" }).exec()
-        res.json(subCategorys)
+        res.status(200).json(subCategorys)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -14,7 +14,7 @@ export const getSubCategory = async (req, res) => {
     const id = req.params.id
     try {
         const subCategory = await SubCategory.findById(id).populate({ path: "product" }).exec()
-        res.json(subCategory)
+        res.status(200).json(subCategory)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -23,7 +23,7 @@ export const getSubCategory = async (req, res) => {
 export const createSubCategory = async (req, res) => {
     try {
         const subCategory = await SubCategory.create(req.body)
-        res.json(subCategory)
+        res.status(200).json(subCategory)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }

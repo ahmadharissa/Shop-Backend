@@ -32,10 +32,12 @@ export const login = async (req, res) => {
         } else {
             var user = null;
             user = await User.findOne({ email });
+
             if (!user)
                 return res.status(400).json({ message: "User doesn't exist." });
 
             const isPasswordCorrect = await bcrypt.compare(password, user.password);
+
             if (!isPasswordCorrect)
                 return res.status(400).json({ message: "Invalid password." });
 
@@ -85,8 +87,10 @@ export const signup = async (req, res) => {
 
     try {
         const user = await User.findOne({ email });
+
         if (user)
             return res.status(400).json({ message: "Email exist." });
+
         if (password.length <= 8)
             return res.status(400).json({ message: "Password must be greater then 8." });
 
@@ -150,7 +154,7 @@ export const forgetPassword = async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user)
-        return res.status(500).json({ message: "Email not existe" })
+        return res.status(400).json({ message: "Email not existe" })
 
     const password = generateRandomString(12)
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -186,7 +190,7 @@ export const resetPassword = async (req, res) => {
 
     const user = await User.findById(decod.id);
     if (!user)
-        return res.status(200).json({ message: "Invalid token" });
+        return res.status(400).json({ message: "User doesn't exist." });
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
@@ -202,7 +206,7 @@ export const resetPassword = async (req, res) => {
 export const getUsers = async (req, res) => {
     try {
         const users = await User.find()
-        res.json(users)
+        res.status(200).json(users)
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -212,7 +216,7 @@ export const getUser = async (req, res) => {
     const id = req.params.id
     try {
         const user = await User.findById(id).populate({ path: "wishlist" }).exec()
-        res.json(user)
+        res.status(200).json(user)
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -231,7 +235,7 @@ export const create = async (req, res) => {
             password: hashedPassword,
             role
         });
-        res.json(newUser)
+        res.status(200).json(newUser)
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -244,7 +248,7 @@ export const editUser = async (req, res) => {
         if (req.body.password)
             newUser['password'] = await bcrypt.hash(req.body.password, 10);
         await User.findByIdAndUpdate(id, newUser)
-        res.json({ message: "User updated successfully" })
+        res.status(200).json({ message: "User updated successfully" })
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
