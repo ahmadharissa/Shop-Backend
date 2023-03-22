@@ -144,7 +144,7 @@ export const verifyEmail = async (req, res) => {
     const user = await User.findOne({ _id: decod.id });
 
     user.verified = true;
-    await newUser.save();
+    await user.save();
 
     return res.status(200).json({ result: "your email has been verified" });
 };
