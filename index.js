@@ -24,6 +24,7 @@ import orderModel from "./model/orders";
 
 //utils
 import { userNotification } from "./utils/socket";
+import { decodeToken } from "./utils/token";
 
 const app = express();
 const stripe = Stripe(
@@ -38,6 +39,7 @@ app.use(express.static("uploads"));
 const server = http.createServer(app);
 export const io = new Server(server, {
   cors: {
+    transports: ["websocket"],
     origin: [
       "http://localhost:3000",
       "http://localhost:3001",
@@ -46,12 +48,26 @@ export const io = new Server(server, {
   },
 });
 
-io.use((socket, next) => {
-  if (!socket.handshake.auth.token) next(new Error("Unathorized"));
-  else next();
+io.on("connect", async function (socket) {
+  var token = socket.handshake.headers.authorization;
+  if (!token) console.log("Unathorized");
+  else {
+    token = token.split(" ")[1];
+    const user = decodeToken(token);
+    console.log("User connected", socket.id);
+  }
 });
+// app.use((req, res, next) => {
+//   req.io = io;
+//   next();
+// });
 
-userNotification(io);
+// io.use((socket, next) => {
+//   if (!socket.handshake.auth.token) next(new Error("Unathorized"));
+//   else next();
+// });
+
+// userNotification(io);
 
 app.post("/payment", (req, res) => {
   try {
