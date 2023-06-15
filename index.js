@@ -25,6 +25,7 @@ import orderModel from "./model/orders";
 //utils
 import { userNotification } from "./utils/socket";
 import { decodeToken } from "./utils/token";
+import User from "./model/users";
 
 const app = express();
 const stripe = Stripe(
@@ -53,18 +54,34 @@ io.on("connect", async function (socket) {
   if (!token) console.log("Unathorized");
   else {
     token = token.split(" ")[1];
-    const user = decodeToken(token);
-    console.log("User connected", socket.id);
+
+    const data = decodeToken(token);
+    const now = new Date();
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const user = await User.findById(data.id);
+
+    socket.broadcast.emit("userConnection", {
+      user_email: user.email,
+      timeZone: timeZone,
+    });
+
+    await User.updateOne(
+      { _id: user.id },
+      { status: "Online", lastConnection: now, socket_id: socket.id }
+    );
+
+    socket.on("disconnect", async () => {
+      await User.updateOne({ _id: user.id }, { status: "Offline" });
+      socket.broadcast.emit("userLeft", {
+        user_email: user.email,
+        timeZone: timeZone,
+      });
+    });
   }
 });
 // app.use((req, res, next) => {
 //   req.io = io;
 //   next();
-// });
-
-// io.use((socket, next) => {
-//   if (!socket.handshake.auth.token) next(new Error("Unathorized"));
-//   else next();
 // });
 
 // userNotification(io);
