@@ -1,49 +1,57 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-    firstName: {
-        type: String,
-        required: true,
+  firstName: {
+    type: String,
+    required: true,
+  },
+  lastName: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    index: { unique: true },
+  },
+  phone: {
+    type: String,
+    required: true,
+    index: { unique: true },
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  role: {
+    type: Number,
+    default: 2,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  avatar: {
+    type: String,
+    default: "default.png",
+  },
+  googleTokenId: {
+    type: String,
+  },
+  wishlist: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Product",
     },
-    lastName: {
-        type: String,
-        required: true,
-    },
-    email: {
-        type: String,
-        required: true,
-        index: { unique: true }
-    },
-    phone: {
-        type: String,
-        required: true,
-        index: { unique: true }
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    role: {
-        type: Number,
-        default: 2,
-    },
-    verified: {
-        type: Boolean,
-        default: false,
-    },
-    avatar: {
-        type: String,
-        default: "default.png",
-    },
-    googleTokenId: {
-        type: String,
-    },
-    wishlist: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Product"
-        }
-    ],
+  ],
+  status: {
+    type: String,
+    enum: ["Online", "Offline"],
+    default: "Offline",
+  },
+  socket_id: {
+    type: String,
+  },
 });
 
 const User = mongoose.model("User", userSchema);
